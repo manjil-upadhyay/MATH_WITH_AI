@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 Fun Math Game for Kids</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .container {
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
+            width: 100%;
+            padding: 40px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff6b6b;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: rainbow 3s infinite;
+        }
+
+        @keyframes rainbow {
+            0% { color: #ff6b6b; }
+            25% { color: #4ecdc4; }
+            50% { color: #45b7d1; }
+            75% { color: #f9ca24; }
+            100% { color: #ff6b6b; }
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        /* Timer */
+        .timer-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .timer {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 20px;
+            font-size: 2em;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            min-width: 150px;
+        }
+
+        .timer.warning {
+            animation: pulse 0.5s infinite;
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            border-radius: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .score-item {
+            text-align: center;
+            color: white;
+            min-width: 100px;
+        }
+
+        .score-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .score-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        /* Difficulty Selector */
+        .difficulty-selector {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .difficulty-label {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .difficulty-btn {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+            border: none;
+            padding: 12px 25px;
+            margin: 5px;
+            border-radius: 15px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .difficulty-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .difficulty-btn.active {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Operation Selector */
+        .level-selector {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .level-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin: 5px;
+            border-radius: 15px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .level-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .level-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: scale(1.1);
+        }
+
+        .question-area {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 20px;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: glow 2s infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(168, 237, 234, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(254, 214, 227, 0.8); }
+        }
+
+        .question {
+            font-size: 2.5em;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            padding: 25px;
+            font-size: 1.8em;
+            font-weight: bold;
+            border: 4px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .option-btn.correct-option:hover {
+            transform: scale(1.05);
+            border-color: #11998e;
+            box-shadow: 0 10px 30px rgba(17, 153, 142, 0.4);
+        }
+
+        .option-btn.correct {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+            color: white !important;
+            border-color: #11998e !important;
+            animation: celebrate 0.6s ease;
+            transform: scale(1) !important;
+        }
+
+        .option-btn.wrong {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+            color: white;
+            border-color: #eb3349;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes celebrate {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.1) rotate(5deg); }
+            50% { transform: scale(1.1) rotate(-5deg); }
+            75% { transform: scale(1.1) rotate(3deg); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-15px) rotate(-5deg); }
+            50% { transform: translateX(15px) rotate(5deg); }
+            75% { transform: translateX(-10px) rotate(-3deg); }
+        }
+
+        .feedback {
+            text-align: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            min-height: 50px;
+            margin-bottom: 20px;
+        }
+
+        .feedback.correct {
+            color: #38ef7d;
+            animation: bounceIn 0.5s ease;
+        }
+
+        .feedback.wrong {
+            color: #f45c43;
+            animation: shakeText 0.5s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0) rotate(-180deg); }
+            50% { transform: scale(1.3) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        @keyframes shakeText {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .next-btn {
+            display: none;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            margin: 0 auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .next-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        .next-btn.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .emoji-rain {
+            position: fixed;
+            font-size: 2.5em;
+            pointer-events: none;
+            animation: fall 3s linear forwards;
+            z-index: 1000;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Sound Toggle */
+        .sound-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 15px;
+            font-size: 1.2em;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .sound-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 { font-size: 2em; }
+            .question { font-size: 2em; }
+            .option-btn { font-size: 1.5em; padding: 20px; height: 120px; }
+            .timer { font-size: 1.5em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="sound-toggle" id="soundToggle" onclick="toggleSound()">🔊 Sound ON</button>
+        
+        <h1>🎮 Fun Math Game</h1>
+        <p class="subtitle">Learn Addition, Subtraction, Multiplication & Division!</p>
+
+        <!-- Timer -->
+        <div class="timer-container">
+            <div class="timer" id="timer">⏱️ 30</div>
+        </div>
+
+        <!-- Score Board -->
+        <div class="score-board">
+            <div class="score-item">
+                <div class="score-label">Score</div>
+                <div class="score-value" id="score">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Streak 🔥</div>
+                <div class="score-value" id="streak">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Correct ✅</div>
+                <div class="score-value" id="correct">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Wrong ❌</div>
+                <div class="score-value" id="wrong">0</div>
+            </div>
+        </div>
+
+        <!-- Difficulty Selector -->
+        <div class="difficulty-selector">
+            <div class="difficulty-label">⭐ Choose Difficulty:</div>
+            <button class="difficulty-btn active" onclick="selectDifficulty('easy')">😊 Easy</button>
+            <button class="difficulty-btn" onclick="selectDifficulty('medium')">😎 Medium</button>
+            <button class="difficulty-btn" onclick="selectDifficulty('hard')">🔥 Hard</button>
+        </div>
+
+        <!-- Operation Selector -->
+        <div class="level-selector">
+            <button class="level-btn active" onclick="selectOperation('addition')">➕ Add</button>
+            <button class="level-btn" onclick="selectOperation('subtraction')">➖ Subtract</button>
+            <button class="level-btn" onclick="selectOperation('multiplication')">✖️ Multiply</button>
+            <button class="level-btn" onclick="selectOperation('division')">➗ Divide</button>
+        </div>
+
+        <!-- Question Area -->
+        <div class="question-area">
+            <div class="question" id="question">5 + 3 = ?</div>
+        </div>
+
+        <!-- Options -->
+        <div class="options-grid" id="optionsGrid"></div>
+
+        <!-- Feedback -->
+        <div class="feedback" id="feedback"></div>
+        
+        <!-- Next Button -->
+        <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Question ➡️</button>
+    </div>
+
+    <script>
+        let score = 0;
+        let correctCount = 0;
+        let wrongCount = 0;
+        let streak = 0;
+        let currentOperation = 'addition';
+        let currentDifficulty = 'easy';
+        let correctAnswer = 0;
+        let answered = false;
+        let timerInterval;
+        let timeLeft = 30;
+        let soundEnabled = true;
+
+        // Audio Context for sound effects
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(frequency, duration, type = 'sine') {
+            if (!soundEnabled) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = frequency;
+            oscillator.type = type;
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+
+        function playCorrectSound() {
+            playSound(523.25, 0.1); // C5
+            setTimeout(() => playSound(659.25, 0.1), 100); // E5
+            setTimeout(() => playSound(783.99, 0.2), 200); // G5
+        }
+
+        function playWrongSound() {
+            playSound(200, 0.3, 'sawtooth');
+        }
+
+        function playClickSound() {
+            playSound(400, 0.05);
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('soundToggle');
+            btn.textContent = soundEnabled ? '🔊 Sound ON' : '🔇 Sound OFF';
+            playClickSound();
+        }
+
+        function selectDifficulty(difficulty) {
+            currentDifficulty = difficulty;
+            playClickSound();
+            
+            // Update active button
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            nextQuestion();
+        }
+
+        function selectOperation(operation) {
+            currentOperation = operation;
+            playClickSound();
+            
+            // Update active button
+            document.querySelectorAll('.level-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            nextQuestion();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            
+            switch(currentDifficulty) {
+                case 'easy': timeLeft = 30; break;
+                case 'medium': timeLeft = 20; break;
+                case 'hard': timeLeft = 15; break;
+            }
+            
+            updateTimerDisplay();
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 5) {
+                    document.getElementById('timer').classList.add('warning');
+                    if (timeLeft > 0) playSound(300, 0.1);
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timeUp();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            document.getElementById('timer').textContent = `⏱️ ${timeLeft}`;
+        }
+
+        function timeUp() {
+            if (answered) return;
+            
+            answered = true;
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = '⏰ Time\'s Up!';
+            feedback.className = 'feedback wrong';
+            
+            wrongCount++;
+            streak = 0;
+            document.getElementById('wrong').textContent = wrongCount;
+            document.getElementById('streak').textContent = streak;
+            
+            // Highlight correct answer
+            const allButtons = document.querySelectorAll('.option-btn');
+            allButtons.forEach(btn => {
+                btn.style.pointerEvents = 'none';
+                btn.onmousemove = null;
+                btn.style.transform = '';
+                if (parseInt(btn.textContent) === correctAnswer) {
+                    btn.classList.add('correct');
+                }
+            });
+            
+            playWrongSound();
+            document.getElementById('nextBtn').classList.add('show');
+        }
+
+        function generateQuestion() {
+            let num1, num2, answer, symbol;
+            let maxTable = 20; // Max table value
+            
+            switch(currentOperation) {
+                case 'addition':
+                    // Difficulty affects the range
+                    if (currentDifficulty === 'easy') {
+                        num1 = Math.floor(Math.random() * 10) + 1; // 1-10
+                        num2 = Math.floor(Math.random() * 10) + 1; // 1-10
+                    } else if (currentDifficulty === 'medium') {
+                        num1 = Math.floor(Math.random() * 15) + 1; // 1-15
+                        num2 = Math.floor(Math.random() * 15) + 1; // 1-15
+                    } else {
+                        num1 = Math.floor(Math.random() * maxTable) + 1; // 1-20
+                        num2 = Math.floor(Math.random() * maxTable) + 1; // 1-20
+                    }
+                    answer = num1 + num2;
+                    symbol = '+';
+                    break;
+                    
+                case 'subtraction':
+                    if (currentDifficulty === 'easy') {
+                        num1 = Math.floor(Math.random() * 10) + 10; // 10-20
+                        num2 = Math.floor(Math.random() * 10) + 1; // 1-10
+                    } else if (currentDifficulty === 'medium') {
+                        num1 = Math.floor(Math.random() * 20) + 10; // 10-30
+                        num2 = Math.floor(Math.random() * 15) + 1; // 1-15
+                    } else {
+                        num1 = Math.floor(Math.random() * 30) + 10; // 10-40
+                        num2 = Math.floor(Math.random() * maxTable) + 1; // 1-20
+                    }
+                    answer = num1 - num2;
+                    symbol = '-';
+                    break;
+                    
+                case 'multiplication':
+                    if (currentDifficulty === 'easy') {
+                        num1 = Math.floor(Math.random() * 5) + 1; // 1-5
+                        num2 = Math.floor(Math.random() * 5) + 1; // 1-5
+                    } else if (currentDifficulty === 'medium') {
+                        num1 = Math.floor(Math.random() * 10) + 1; // 1-10
+                        num2 = Math.floor(Math.random() * 10) + 1; // 1-10
+                    } else {
+                        num1 = Math.floor(Math.random() * maxTable) + 1; // 1-20
+                        num2 = Math.floor(Math.random() * 10) + 1; // 1-10
+                    }
+                    answer = num1 * num2; // Max: 20 × 10 = 200
+                    symbol = '×';
+                    break;
+                    
+                case 'division':
+                    if (currentDifficulty === 'easy') {
+                        num2 = Math.floor(Math.random() * 5) + 1; // 1-5
+                        answer = Math.floor(Math.random() * 5) + 1; // 1-5
+                    } else if (currentDifficulty === 'medium') {
+                        num2 = Math.floor(Math.random() * 10) + 1; // 1-10
+                        answer = Math.floor(Math.random() * 10) + 1; // 1-10
+                    } else {
+                        num2 = Math.floor(Math.random() * maxTable) + 1; // 1-20
+                        answer = Math.floor(Math.random() * 10) + 1; // 1-10
+                    }
+                    num1 = num2 * answer; // Max: 20 × 10 = 200
+                    symbol = '÷';
+                    break;
+            }
+            
+            correctAnswer = answer;
+            
+            // Display question
+            document.getElementById('question').textContent = `${num1} ${symbol} ${num2} = ?`;
+            
+            // Generate options
+            generateOptions(answer);
+        }
+
+        function generateOptions(correctAns) {
+            let options = [correctAns];
+            
+            // Generate 3 wrong answers
+            let attempts = 0;
+            while(options.length < 4 && attempts < 50) {
+                attempts++;
+                let wrongAns = correctAns + Math.floor(Math.random() * 20) - 10;
+                if (wrongAns !== correctAns && wrongAns > 0 && !options.includes(wrongAns)) {
+                    options.push(wrongAns);
+                }
+            }
+            
+            // Fill remaining if needed
+            while(options.length < 4) {
+                let wrongAns = Math.floor(Math.random() * 100) + 1;
+                if (!options.includes(wrongAns)) {
+                    options.push(wrongAns);
+                }
+            }
+            
+            // Shuffle options
+            options.sort(() => Math.random() - 0.5);
+            
+            // Display options
+            const optionsGrid = document.getElementById('optionsGrid');
+            optionsGrid.innerHTML = '';
+            
+            options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                
+                // If this is the correct answer, mark it and allow normal hover
+                if (option === correctAns) {
+                    btn.classList.add('correct-option');
+                    btn.onclick = function() { checkAnswer(this, option); };
+                } else {
+                    // Wrong answer - make it run away on hover
+                    btn.onmousemove = function(e) {
+                        if (answered) return;
+                        runAwayFromMouse(btn, e);
+                    };
+                    btn.onclick = function() { checkAnswer(this, option); };
+                }
+                
+                optionsGrid.appendChild(btn);
+            });
+        }
+
+        function runAwayFromMouse(button, event) {
+            const rect = button.getBoundingClientRect();
+            const btnCenterX = rect.left + rect.width / 2;
+            const btnCenterY = rect.top + rect.height / 2;
+            
+            const mouseX = event.clientX;
+            const mouseY = event.clientY;
+            
+            // Calculate distance from mouse to button center
+            const distX = btnCenterX - mouseX;
+            const distY = btnCenterY - mouseY;
+            const distance = Math.sqrt(distX * distX + distY * distY);
+            
+            // If mouse is close enough, move the button away
+            if (distance < 150) {
+                const angle = Math.atan2(distY, distX);
+                const moveDistance = 80;
+                
+                const newX = Math.cos(angle) * moveDistance;
+                const newY = Math.sin(angle) * moveDistance;
+                
+                button.style.transform = `translate(${newX}px, ${newY}px)`;
+                
+                // Reset position after a delay
+                setTimeout(() => {
+                    if (!answered) {
+                        button.style.transform = 'translate(0, 0)';
+                    }
+                }, 500);
+            }
+        }
+
+        function checkAnswer(button, selectedAnswer) {
+            if (answered) return;
+            
+            answered = true;
+            clearInterval(timerInterval);
+            playClickSound();
+            
+            const feedback = document.getElementById('feedback');
+            const allButtons = document.querySelectorAll('.option-btn');
+            
+            // Disable all mouse movements and reset transforms
+            allButtons.forEach(btn => {
+                btn.onmousemove = null;
+                btn.style.pointerEvents = 'none';
+                btn.style.transform = '';
+            });
+            
+            if (selectedAnswer === correctAnswer) {
+                // Correct answer
+                button.classList.add('correct');
+                
+                const messages = ['🎉 Awesome!', '⭐ Brilliant!', '🌟 Perfect!', '🏆 Amazing!', '💯 Excellent!'];
+                feedback.textContent = messages[Math.floor(Math.random() * messages.length)];
+                feedback.className = 'feedback correct';
+                
+                // Calculate points based on time and difficulty
+                let points = 10;
+                if (currentDifficulty === 'medium') points = 20;
+                if (currentDifficulty === 'hard') points = 30;
+                if (timeLeft > 15) points += 5;
+                
+                score += points;
+                correctCount++;
+                streak++;
+                
+                document.getElementById('score').textContent = score;
+                document.getElementById('correct').textContent = correctCount;
+                document.getElementById('streak').textContent = streak;
+                
+                // Celebrate with emojis
+                createEmojiRain(['🌟', '⭐', '✨', '🎊', '🎉', '💫', '🏆']);
+                
+                playCorrectSound();
+                
+            } else {
+                // Wrong answer
+                button.classList.add('wrong');
+                
+                const messages = ['❌ Oops! Try harder!', '😅 Not quite!', '💪 Keep trying!', '🤔 Almost there!'];
+                feedback.textContent = messages[Math.floor(Math.random() * messages.length)];
+                feedback.className = 'feedback wrong';
+                
+                wrongCount++;
+                streak = 0;
+                document.getElementById('wrong').textContent = wrongCount;
+                document.getElementById('streak').textContent = streak;
+                
+                // Highlight correct answer
+                allButtons.forEach(btn => {
+                    if (parseInt(btn.textContent) === correctAnswer) {
+                        btn.classList.add('correct');
+                    }
+                });
+                
+                playWrongSound();
+            }
+            
+            // Remove timer warning
+            document.getElementById('timer').classList.remove('warning');
+            
+            // Show next button
+            document.getElementById('nextBtn').classList.add('show');
+        }
+
+        function createEmojiRain(emojis) {
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'emoji-rain';
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    emoji.style.left = Math.random() * window.innerWidth + 'px';
+                    emoji.style.top = '-50px';
+                    document.body.appendChild(emoji);
+                    
+                    setTimeout(() => emoji.remove(), 3000);
+                }, i * 50);
+            }
+        }
+
+        function nextQuestion() {
+            answered = false;
+            
+            // Reset UI
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('nextBtn').classList.remove('show');
+            document.getElementById('timer').classList.remove('warning');
+            
+            // Generate new question
+            generateQuestion();
+            
+            // Start timer
+            startTimer();
+        }
+
+        // Initialize first question
+        generateQuestion();
+        startTimer();
+    </script>
+</body>
+</html>
