@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 Math Challenge - Grade 5</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .container {
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 1000px;
+            width: 100%;
+            padding: 40px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff6b6b;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: rainbow 3s infinite;
+        }
+
+        @keyframes rainbow {
+            0% { color: #ff6b6b; }
+            25% { color: #4ecdc4; }
+            50% { color: #45b7d1; }
+            75% { color: #f9ca24; }
+            100% { color: #ff6b6b; }
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        /* Timer */
+        .timer-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .timer {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 20px;
+            font-size: 2em;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            min-width: 150px;
+        }
+
+        .timer.warning {
+            animation: pulse 0.5s infinite;
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            border-radius: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .score-item {
+            text-align: center;
+            color: white;
+            min-width: 100px;
+        }
+
+        .score-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .score-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        /* Difficulty Selector */
+        .difficulty-selector {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .difficulty-label {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .difficulty-btn {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+            border: none;
+            padding: 12px 25px;
+            margin: 5px;
+            border-radius: 15px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .difficulty-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .difficulty-btn.active {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Operation Selector */
+        .level-selector {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .level-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin: 5px;
+            border-radius: 15px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .level-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .level-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: scale(1.1);
+        }
+
+        .question-area {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 20px;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: glow 2s infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(168, 237, 234, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(254, 214, 227, 0.8); }
+        }
+
+        .question {
+            font-size: 2em;
+            color: #333;
+            font-weight: bold;
+            line-height: 1.5;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            padding: 25px;
+            font-size: 1.6em;
+            font-weight: bold;
+            border: 4px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .option-btn.correct-option:hover {
+            transform: scale(1.05);
+            border-color: #11998e;
+            box-shadow: 0 10px 30px rgba(17, 153, 142, 0.4);
+        }
+
+        .option-btn.correct {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+            color: white !important;
+            border-color: #11998e !important;
+            animation: celebrate 0.6s ease;
+            transform: scale(1) !important;
+        }
+
+        .option-btn.wrong {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+            color: white;
+            border-color: #eb3349;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes celebrate {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.1) rotate(5deg); }
+            50% { transform: scale(1.1) rotate(-5deg); }
+            75% { transform: scale(1.1) rotate(3deg); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-15px) rotate(-5deg); }
+            50% { transform: translateX(15px) rotate(5deg); }
+            75% { transform: translateX(-10px) rotate(-3deg); }
+        }
+
+        .feedback {
+            text-align: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            min-height: 50px;
+            margin-bottom: 20px;
+        }
+
+        .feedback.correct {
+            color: #38ef7d;
+            animation: bounceIn 0.5s ease;
+        }
+
+        .feedback.wrong {
+            color: #f45c43;
+            animation: shakeText 0.5s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0) rotate(-180deg); }
+            50% { transform: scale(1.3) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        @keyframes shakeText {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .next-btn {
+            display: none;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            margin: 0 auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .next-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        .next-btn.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .emoji-rain {
+            position: fixed;
+            font-size: 2.5em;
+            pointer-events: none;
+            animation: fall 3s linear forwards;
+            z-index: 1000;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Sound Toggle */
+        .sound-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 15px;
+            font-size: 1.2em;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .sound-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 { font-size: 2em; }
+            .question { font-size: 1.5em; }
+            .option-btn { font-size: 1.3em; padding: 20px; min-height: 100px; }
+            .timer { font-size: 1.5em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="sound-toggle" id="soundToggle" onclick="toggleSound()">🔊 Sound ON</button>
+        
+        <h1>🎮 Math Challenge - Grade 5</h1>
+        <p class="subtitle">Test Your Math Skills!</p>
+
+        <!-- Timer -->
+        <div class="timer-container">
+            <div class="timer" id="timer">⏱️ 45</div>
+        </div>
+
+        <!-- Score Board -->
+        <div class="score-board">
+            <div class="score-item">
+                <div class="score-label">Score</div>
+                <div class="score-value" id="score">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Streak 🔥</div>
+                <div class="score-value" id="streak">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Correct ✅</div>
+                <div class="score-value" id="correct">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Wrong ❌</div>
+                <div class="score-value" id="wrong">0</div>
+            </div>
+        </div>
+
+        <!-- Difficulty Selector -->
+        <div class="difficulty-selector">
+            <div class="difficulty-label">⭐ Choose Difficulty:</div>
+            <button class="difficulty-btn" onclick="selectDifficulty('easy')">📗 Grade 3-4</button>
+            <button class="difficulty-btn active" onclick="selectDifficulty('medium')">📘 Grade 5</button>
+            <button class="difficulty-btn" onclick="selectDifficulty('hard')">📕 Grade 6+</button>
+        </div>
+
+        <!-- Operation Selector -->
+        <div class="level-selector">
+            <button class="level-btn active" onclick="selectOperation('addition')">➕ Addition</button>
+            <button class="level-btn" onclick="selectOperation('subtraction')">➖ Subtraction</button>
+            <button class="level-btn" onclick="selectOperation('multiplication')">✖️ Multiplication</button>
+            <button class="level-btn" onclick="selectOperation('division')">➗ Division</button>
+            <button class="level-btn" onclick="selectOperation('fractions')">🍕 Fractions</button>
+            <button class="level-btn" onclick="selectOperation('decimals')">💯 Decimals</button>
+            <button class="level-btn" onclick="selectOperation('percentage')">📊 Percentage</button>
+            <button class="level-btn" onclick="selectOperation('bodmas')">🧮 BODMAS</button>
+            <button class="level-btn" onclick="selectOperation('wordproblem')">📖 Word Problems</button>
+        </div>
+
+        <!-- Question Area -->
+        <div class="question-area">
+            <div class="question" id="question">25 + 37 = ?</div>
+        </div>
+
+        <!-- Options -->
+        <div class="options-grid" id="optionsGrid"></div>
+
+        <!-- Feedback -->
+        <div class="feedback" id="feedback"></div>
+        
+        <!-- Next Button -->
+        <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Question ➡️</button>
+    </div>
+
+    <script>
+        let score = 0;
+        let correctCount = 0;
+        let wrongCount = 0;
+        let streak = 0;
+        let currentOperation = 'addition';
+        let currentDifficulty = 'medium';
+        let correctAnswer = 0;
+        let answered = false;
+        let timerInterval;
+        let timeLeft = 45;
+        let soundEnabled = true;
+
+        // Audio Context for sound effects
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(frequency, duration, type = 'sine') {
+            if (!soundEnabled) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = frequency;
+            oscillator.type = type;
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+
+        function playCorrectSound() {
+            playSound(523.25, 0.1);
+            setTimeout(() => playSound(659.25, 0.1), 100);
+            setTimeout(() => playSound(783.99, 0.2), 200);
+        }
+
+        function playWrongSound() {
+            playSound(200, 0.3, 'sawtooth');
+        }
+
+        function playClickSound() {
+            playSound(400, 0.05);
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('soundToggle');
+            btn.textContent = soundEnabled ? '🔊 Sound ON' : '🔇 Sound OFF';
+            playClickSound();
+        }
+
+        function selectDifficulty(difficulty) {
+            currentDifficulty = difficulty;
+            playClickSound();
+            
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            nextQuestion();
+        }
+
+        function selectOperation(operation) {
+            currentOperation = operation;
+            playClickSound();
+            
+            document.querySelectorAll('.level-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            nextQuestion();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            
+            switch(currentDifficulty) {
+                case 'easy': timeLeft = 60; break;
+                case 'medium': timeLeft = 45; break;
+                case 'hard': timeLeft = 30; break;
+            }
+            
+            updateTimerDisplay();
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 10) {
+                    document.getElementById('timer').classList.add('warning');
+                    if (timeLeft > 0 && timeLeft <= 5) playSound(300, 0.1);
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timeUp();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            document.getElementById('timer').textContent = `⏱️ ${timeLeft}`;
+        }
+
+        function timeUp() {
+            if (answered) return;
+            
+            answered = true;
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = '⏰ Time\'s Up!';
+            feedback.className = 'feedback wrong';
+            
+            wrongCount++;
+            streak = 0;
+            document.getElementById('wrong').textContent = wrongCount;
+            document.getElementById('streak').textContent = streak;
+            
+            const allButtons = document.querySelectorAll('.option-btn');
+            allButtons.forEach(btn => {
+                btn.style.pointerEvents = 'none';
+                btn.onmousemove = null;
+                btn.style.transform = '';
+                if (parseFloat(btn.textContent) === correctAnswer || btn.textContent === correctAnswer.toString()) {
+                    btn.classList.add('correct');
+                }
+            });
+            
+            playWrongSound();
+            document.getElementById('nextBtn').classList.add('show');
+        }
+
+        function gcd(a, b) {
+            return b === 0 ? a : gcd(b, a % b);
+        }
+
+        function generateQuestion() {
+            let questionText = '';
+            let answer;
+            
+            switch(currentOperation) {
+                case 'addition':
+                    answer = generateAddition();
+                    break;
+                case 'subtraction':
+                    answer = generateSubtraction();
+                    break;
+                case 'multiplication':
+                    answer = generateMultiplication();
+                    break;
+                case 'division':
+                    answer = generateDivision();
+                    break;
+                case 'fractions':
+                    answer = generateFractions();
+                    break;
+                case 'decimals':
+                    answer = generateDecimals();
+                    break;
+                case 'percentage':
+                    answer = generatePercentage();
+                    break;
+                case 'bodmas':
+                    answer = generateBODMAS();
+                    break;
+                case 'wordproblem':
+                    answer = generateWordProblem();
+                    break;
+            }
+        }
+
+        function generateAddition() {
+            let num1, num2;
+            if (currentDifficulty === 'easy') {
+                num1 = Math.floor(Math.random() * 50) + 10;
+                num2 = Math.floor(Math.random() * 50) + 10;
+            } else if (currentDifficulty === 'medium') {
+                num1 = Math.floor(Math.random() * 500) + 50;
+                num2 = Math.floor(Math.random() * 500) + 50;
+            } else {
+                num1 = Math.floor(Math.random() * 5000) + 500;
+                num2 = Math.floor(Math.random() * 5000) + 500;
+            }
+            
+            correctAnswer = num1 + num2;
+            document.getElementById('question').textContent = `${num1} + ${num2} = ?`;
+            generateOptions(correctAnswer);
+        }
+
+        function generateSubtraction() {
+            let num1, num2;
+            if (currentDifficulty === 'easy') {
+                num1 = Math.floor(Math.random() * 100) + 50;
+                num2 = Math.floor(Math.random() * 50) + 10;
+            } else if (currentDifficulty === 'medium') {
+                num1 = Math.floor(Math.random() * 1000) + 500;
+                num2 = Math.floor(Math.random() * 500) + 100;
+            } else {
+                num1 = Math.floor(Math.random() * 10000) + 5000;
+                num2 = Math.floor(Math.random() * 5000) + 1000;
+            }
+            
+            correctAnswer = num1 - num2;
+            document.getElementById('question').textContent = `${num1} - ${num2} = ?`;
+            generateOptions(correctAnswer);
+        }
+
+        function generateMultiplication() {
+            let num1, num2;
+            if (currentDifficulty === 'easy') {
+                num1 = Math.floor(Math.random() * 12) + 1;
+                num2 = Math.floor(Math.random() * 12) + 1;
+            } else if (currentDifficulty === 'medium') {
+                num1 = Math.floor(Math.random() * 25) + 10;
+                num2 = Math.floor(Math.random() * 25) + 10;
+            } else {
+                num1 = Math.floor(Math.random() * 99) + 20;
+                num2 = Math.floor(Math.random() * 50) + 10;
+            }
+            
+            correctAnswer = num1 * num2;
+            document.getElementById('question').textContent = `${num1} × ${num2} = ?`;
+            generateOptions(correctAnswer);
+        }
+
+        function generateDivision() {
+            let divisor, quotient;
+            if (currentDifficulty === 'easy') {
+                divisor = Math.floor(Math.random() * 10) + 2;
+                quotient = Math.floor(Math.random() * 10) + 2;
+            } else if (currentDifficulty === 'medium') {
+                divisor = Math.floor(Math.random() * 20) + 5;
+                quotient = Math.floor(Math.random() * 20) + 5;
+            } else {
+                divisor = Math.floor(Math.random() * 50) + 10;
+                quotient = Math.floor(Math.random() * 50) + 10;
+            }
+            
+            const dividend = divisor * quotient;
+            correctAnswer = quotient;
+            document.getElementById('question').textContent = `${dividend} ÷ ${divisor} = ?`;
+            generateOptions(correctAnswer);
+        }
+
+        function generateFractions() {
+            const operations = ['+', '-'];
+            const op = operations[Math.floor(Math.random() * operations.length)];
+            
+            let num1, den1, num2, den2;
+            
+            if (currentDifficulty === 'easy') {
+                den1 = den2 = Math.floor(Math.random() * 8) + 2;
+                num1 = Math.floor(Math.random() * den1) + 1;
+                num2 = Math.floor(Math.random() * den2) + 1;
+            } else {
+                den1 = Math.floor(Math.random() * 10) + 2;
+                den2 = Math.floor(Math.random() * 10) + 2;
+                num1 = Math.floor(Math.random() * den1) + 1;
+                num2 = Math.floor(Math.random() * den2) + 1;
+            }
+            
+            let resultNum, resultDen;
+            
+            if (den1 === den2) {
+                resultDen = den1;
+                resultNum = op === '+' ? num1 + num2 : num1 - num2;
+            } else {
+                resultDen = den1 * den2;
+                if (op === '+') {
+                    resultNum = (num1 * den2) + (num2 * den1);
+                } else {
+                    resultNum = (num1 * den2) - (num2 * den1);
+                }
+            }
+            
+            if (resultNum <= 0) {
+                return generateFractions();
+            }
+            
+            const divisor = gcd(Math.abs(resultNum), resultDen);
+            resultNum = resultNum / divisor;
+            resultDen = resultDen / divisor;
+            
+            correctAnswer = `${resultNum}/${resultDen}`;
+            document.getElementById('question').textContent = `${num1}/${den1} ${op} ${num2}/${den2} = ?`;
+            generateFractionOptions(resultNum, resultDen);
+        }
+
+        function generateDecimals() {
+            let num1, num2;
+            const op = ['+', '-', '×'][Math.floor(Math.random() * 3)];
+            
+            if (currentDifficulty === 'easy') {
+                num1 = (Math.floor(Math.random() * 100) / 10).toFixed(1);
+                num2 = (Math.floor(Math.random() * 100) / 10).toFixed(1);
+            } else if (currentDifficulty === 'medium') {
+                num1 = (Math.floor(Math.random() * 1000) / 100).toFixed(2);
+                num2 = (Math.floor(Math.random() * 1000) / 100).toFixed(2);
+            } else {
+                num1 = (Math.floor(Math.random() * 10000) / 100).toFixed(2);
+                num2 = (Math.floor(Math.random() * 10000) / 100).toFixed(2);
+            }
+            
+            num1 = parseFloat(num1);
+            num2 = parseFloat(num2);
+            
+            if (op === '+') correctAnswer = (num1 + num2).toFixed(2);
+            else if (op === '-') correctAnswer = (num1 - num2).toFixed(2);
+            else correctAnswer = (num1 * num2).toFixed(2);
+            
+            correctAnswer = parseFloat(correctAnswer);
+            
+            document.getElementById('question').textContent = `${num1} ${op} ${num2} = ?`;
+            generateOptions(correctAnswer);
+        }
+
+        function generatePercentage() {
+            const types = ['find', 'of', 'increase', 'decrease'];
+            const type = types[Math.floor(Math.random() * types.length)];
+            
+            if (type === 'find') {
+                const part = Math.floor(Math.random() * 50) + 10;
+                const whole = Math.floor(Math.random() * 100) + 50;
+                correctAnswer = Math.round((part / whole) * 100);
+                document.getElementById('question').textContent = `${part} is what % of ${whole}?`;
+            } else if (type === 'of') {
+                const percent = Math.floor(Math.random() * 50) + 10;
+                const number = Math.floor(Math.random() * 200) + 50;
+                correctAnswer = Math.round((percent / 100) * number);
+                document.getElementById('question').textContent = `${percent}% of ${number} = ?`;
+            } else if (type === 'increase') {
+                const number = Math.floor(Math.random() * 200) + 50;
+                const percent = Math.floor(Math.random() * 30) + 10;
+                correctAnswer = Math.round(number * (1 + percent/100));
+                document.getElementById('question').textContent = `Increase ${number} by ${percent}%`;
+            } else {
+                const number = Math.floor(Math.random() * 200) + 100;
+                const percent = Math.floor(Math.random() * 30) + 10;
+                correctAnswer = Math.round(number * (1 - percent/100));
+                document.getElementById('question').textContent = `Decrease ${number} by ${percent}%`;
+            }
+            
+            generateOptions(correctAnswer);
+        }
+
+        function generateBODMAS() {
+            if (currentDifficulty === 'easy') {
+                const a = Math.floor(Math.random() * 10) + 1;
+                const b = Math.floor(Math.random() * 10) + 1;
+                const c = Math.floor(Math.random() * 10) + 1;
+                correctAnswer = a + b * c;
+                document.getElementById('question').textContent = `${a} + ${b} × ${c} = ?`;
+            } else if (currentDifficulty === 'medium') {
+                const a = Math.floor(Math.random() * 20) + 5;
+                const b = Math.floor(Math.random() * 10) + 2;
+                const c = Math.floor(Math.random() * 10) + 2;
+                const d = Math.floor(Math.random() * 5) + 1;
+                correctAnswer = (a + b) * c - d;
+                document.getElementById('question').textContent = `(${a} + ${b}) × ${c} - ${d} = ?`;
+            } else {
+                const a = Math.floor(Math.random() * 20) + 10;
+                const b = Math.floor(Math.random() * 10) + 2;
+                const c = Math.floor(Math.random() * 10) + 2;
+                const d = Math.floor(Math.random() * 5) + 2;
+                const e = Math.floor(Math.random() * 5) + 1;
+                correctAnswer = a + b * c / d - e;
+                correctAnswer = Math.round(correctAnswer);
+                document.getElementById('question').textContent = `${a} + ${b} × ${c} ÷ ${d} - ${e} = ?`;
+            }
+            
+            generateOptions(correctAnswer);
+        }
+
+        function generateWordProblem() {
+            const problems = [
+                {
+                    text: (a, b) => `Sarah has ${a} apples. She buys ${b} more. How many apples does she have now?`,
+                    calc: (a, b) => a + b,
+                    range: currentDifficulty === 'easy' ? [10, 50] : currentDifficulty === 'medium' ? [50, 200] : [100, 500]
+                },
+                {
+                    text: (a, b) => `A book costs ₹${a}. John buys ${b} books. How much does he pay?`,
+                    calc: (a, b) => a * b,
+                    range: currentDifficulty === 'easy' ? [10, 20] : currentDifficulty === 'medium' ? [50, 100] : [100, 200]
+                },
+                {
+                    text: (a, b) => `${a} students share ${b} pencils equally. How many pencils does each student get?`,
+                    calc: (a, b) => b / a,
+                    range: currentDifficulty === 'easy' ? [2, 10] : currentDifficulty === 'medium' ? [5, 20] : [10, 30]
+                },
+                {
+                    text: (a, b) => `A train travels ${a} km per hour. How far does it travel in ${b} hours?`,
+                    calc: (a, b) => a * b,
+                    range: currentDifficulty === 'easy' ? [20, 60] : currentDifficulty === 'medium' ? [60, 120] : [100, 200]
+                }
+            ];
+            
+            const problem = problems[Math.floor(Math.random() * problems.length)];
+            const [min, max] = problem.range;
+            
+            let a = Math.floor(Math.random() * (max - min)) + min;
+            let b = Math.floor(Math.random() * (max - min)) + min;
+            
+            // For division problems, ensure it divides evenly
+            if (problem.calc.toString().includes('/')) {
+                b = a * (Math.floor(Math.random() * 10) + 2);
+            }
+            
+            correctAnswer = problem.calc(a, b);
+            document.getElementById('question').textContent = problem.text(a, b);
+            generateOptions(correctAnswer);
+        }
+
+        function generateOptions(correctAns) {
+            let options = [correctAns];
+            
+            let attempts = 0;
+            while(options.length < 4 && attempts < 50) {
+                attempts++;
+                let range = Math.abs(correctAns) > 100 ? 50 : 20;
+                let wrongAns = correctAns + Math.floor(Math.random() * range * 2) - range;
+                
+                if (typeof correctAns === 'number') {
+                    wrongAns = Math.round(wrongAns * 100) / 100;
+                }
+                
+                if (wrongAns !== correctAns && wrongAns > 0 && !options.includes(wrongAns)) {
+                    options.push(wrongAns);
+                }
+            }
+            
+            while(options.length < 4) {
+                let wrongAns = Math.floor(Math.random() * 1000) + 1;
+                if (!options.includes(wrongAns)) {
+                    options.push(wrongAns);
+                }
+            }
+            
+            options.sort(() => Math.random() - 0.5);
+            displayOptions(options, correctAns);
+        }
+
+        function generateFractionOptions(num, den) {
+            let options = [`${num}/${den}`];
+            
+            for (let i = 0; i < 3; i++) {
+                let wrongNum = num + Math.floor(Math.random() * 6) - 3;
+                let wrongDen = den + Math.floor(Math.random() * 4) - 2;
+                if (wrongNum > 0 && wrongDen > 0 && !options.includes(`${wrongNum}/${wrongDen}`)) {
+                    options.push(`${wrongNum}/${wrongDen}`);
+                }
+            }
+            
+            while (options.length < 4) {
+                let wrongNum = Math.floor(Math.random() * 10) + 1;
+                let wrongDen = Math.floor(Math.random() * 10) + 2;
+                if (!options.includes(`${wrongNum}/${wrongDen}`)) {
+                    options.push(`${wrongNum}/${wrongDen}`);
+                }
+            }
+            
+            options.sort(() => Math.random() - 0.5);
+            correctAnswer = `${num}/${den}`;
+            displayOptions(options, correctAnswer);
+        }
+
+        function displayOptions(options, correctAns) {
+            const optionsGrid = document.getElementById('optionsGrid');
+            optionsGrid.innerHTML = '';
+            
+            options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                
+                if (option === correctAns) {
+                    btn.classList.add('correct-option');
+                    btn.onclick = function() { checkAnswer(this, option); };
+                } else {
+                    btn.onmousemove = function(e) {
+                        if (answered) return;
+                        runAwayFromMouse(btn, e);
+                    };
+                    btn.onclick = function() { checkAnswer(this, option); };
+                }
+                
+                optionsGrid.appendChild(btn);
+            });
+        }
+
+        function runAwayFromMouse(button, event) {
+            const rect = button.getBoundingClientRect();
+            const btnCenterX = rect.left + rect.width / 2;
+            const btnCenterY = rect.top + rect.height / 2;
+            
+            const mouseX = event.clientX;
+            const mouseY = event.clientY;
+            
+            const distX = btnCenterX - mouseX;
+            const distY = btnCenterY - mouseY;
+            const distance = Math.sqrt(distX * distX + distY * distY);
+            
+            if (distance < 150) {
+                const angle = Math.atan2(distY, distX);
+                const moveDistance = 80;
+                
+                const newX = Math.cos(angle) * moveDistance;
+                const newY = Math.sin(angle) * moveDistance;
+                
+                button.style.transform = `translate(${newX}px, ${newY}px)`;
+                
+                setTimeout(() => {
+                    if (!answered) {
+                        button.style.transform = 'translate(0, 0)';
+                    }
+                }, 500);
+            }
+        }
+
+        function checkAnswer(button, selectedAnswer) {
+            if (answered) return;
+            
+            answered = true;
+            clearInterval(timerInterval);
+            playClickSound();
+            
+            const feedback = document.getElementById('feedback');
+            const allButtons = document.querySelectorAll('.option-btn');
+            
+            allButtons.forEach(btn => {
+                btn.onmousemove = null;
+                btn.style.pointerEvents = 'none';
+                btn.style.transform = '';
+            });
+            
+            if (selectedAnswer === correctAnswer || selectedAnswer.toString() === correctAnswer.toString()) {
+                button.classList.add('correct');
+                
+                const messages = ['🎉 Excellent!', '⭐ Brilliant!', '🌟 Perfect!', '🏆 Outstanding!', '💯 Genius!'];
+                feedback.textContent = messages[Math.floor(Math.random() * messages.length)];
+                feedback.className = 'feedback correct';
+                
+                let points = 10;
+                if (currentDifficulty === 'medium') points = 25;
+                if (currentDifficulty === 'hard') points = 50;
+                if (timeLeft > 30) points += 10;
+                
+                score += points;
+                correctCount++;
+                streak++;
+                
+                document.getElementById('score').textContent = score;
+                document.getElementById('correct').textContent = correctCount;
+                document.getElementById('streak').textContent = streak;
+                
+                createEmojiRain(['🌟', '⭐', '✨', '🎊', '🎉', '💫', '🏆', '🥇']);
+                
+                playCorrectSound();
+                
+            } else {
+                button.classList.add('wrong');
+                
+                const messages = ['❌ Try harder!', '😅 Not quite!', '💪 Keep practicing!', '🤔 Close!'];
+                feedback.textContent = messages[Math.floor(Math.random() * messages.length)];
+                feedback.className = 'feedback wrong';
+                
+                wrongCount++;
+                streak = 0;
+                document.getElementById('wrong').textContent = wrongCount;
+                document.getElementById('streak').textContent = streak;
+                
+                allButtons.forEach(btn => {
+                    if (btn.textContent === correctAnswer.toString() || btn.textContent === correctAnswer) {
+                        btn.classList.add('correct');
+                    }
+                });
+                
+                playWrongSound();
+            }
+            
+            document.getElementById('timer').classList.remove('warning');
+            document.getElementById('nextBtn').classList.add('show');
+        }
+
+        function createEmojiRain(emojis) {
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'emoji-rain';
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    emoji.style.left = Math.random() * window.innerWidth + 'px';
+                    emoji.style.top = '-50px';
+                    document.body.appendChild(emoji);
+                    
+                    setTimeout(() => emoji.remove(), 3000);
+                }, i * 50);
+            }
+        }
+
+        function nextQuestion() {
+            answered = false;
+            
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('nextBtn').classList.remove('show');
+            document.getElementById('timer').classList.remove('warning');
+            
+            generateQuestion();
+            startTimer();
+        }
+
+        // Initialize first question
+        generateQuestion();
+        startTimer();
+    </script>
+</body>
+</html>
